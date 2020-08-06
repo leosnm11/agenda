@@ -9,7 +9,10 @@ import moment from 'moment';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import PreLoading from '../helpers/preLoading.js';
 import allLocale from '@fullcalendar/core/locales-all';
+import dotenv from 'dotenv';
 
+dotenv.config();
+console.log(process.env);
 export default function Calendar() {
   const [allEvent, setAllEvent] = useState([]);
   const [active, setActive] = useState(false);
@@ -23,11 +26,12 @@ export default function Calendar() {
     };
     Event();
   }, []);
+
   const eventos = allEvent.map((events) => {
-    const { _id, event, data, user, tn } = events;
+    const { _id, event, data, user } = events;
     return {
       id: _id,
-      title: `${event} - ${user} - Turno: ${tn}`,
+      title: `${event} - ${user}`,
       start: moment(data).format('YYYY-MM-DD'),
       end: moment(data).format('YYYY-MM-DD'),
       backgroundColor: `${
@@ -72,12 +76,12 @@ export default function Calendar() {
           </button>
           <div className={css.atividades}>
             <div>
-              <span>Atividade: </span>
-              <span>{filter.event}</span>
-            </div>
-            <div>
               <span>Responsável: </span>
               <span>{filter.user}</span>
+            </div>
+            <div>
+              <span>Atividade: </span>
+              <span>{filter.event}</span>
             </div>
             <div>
               <span>Turno: </span>
