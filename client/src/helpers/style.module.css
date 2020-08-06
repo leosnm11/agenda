@@ -1,0 +1,53 @@
+.body {
+  width: 85%;
+  margin: 0 auto;
+}
+.tooltip {
+  position: absolute;
+  bottom: 700px;
+  left: 42%;
+  width: 400px;
+  height: auto;
+  text-align: left;
+  z-index: 2;
+  background-color: white;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row-reverse;
+  border: 1px solid gray;
+  padding: 15px;
+}
+
+.atividades {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  font-size: 1.5rem;
+  padding: 15px;
+}
+
+.preloading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.formAdd {
+  margin-right: 20%;
+  margin-left: 20%;
+  margin-top: 1%;
+  border: 1px solid gray;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.dataAdd {
+  cursor: pointer;
+}
+.buttonAdd {
+  text-align: right;
+}
