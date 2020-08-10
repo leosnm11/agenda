@@ -17,6 +17,23 @@ async function getEvent() {
     console.log(err);
   }
 }
+async function getListEvent() {
+  try {
+    const res = await http.get(`/v1/api/agenda/eventos`);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getUser(filter) {
+  try {
+    const res = await http.get(`/v1/api/agenda/user?distinct=${filter}`);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 async function deleteOne(id) {
   return await http.delete(`/v1/api/agenda/${id}`);
@@ -32,4 +49,12 @@ async function createEvent(data) {
   return res;
 }
 
-export { getDateEvent, getEvent, deleteOne, updateEvent, createEvent };
+export {
+  getListEvent,
+  getDateEvent,
+  getEvent,
+  deleteOne,
+  updateEvent,
+  createEvent,
+  getUser,
+};

@@ -12,7 +12,6 @@ import allLocale from '@fullcalendar/core/locales-all';
 import dotenv from 'dotenv';
 
 dotenv.config();
-console.log(process.env);
 export default function Calendar() {
   const [allEvent, setAllEvent] = useState([]);
   const [active, setActive] = useState(false);
@@ -27,44 +26,47 @@ export default function Calendar() {
     Event();
   }, []);
 
+  // let json2 = [];
+  // const ev = allEvent.forEach((e, i) => {
+  //   const { _id, user, color, doc } = e;
+  //   if (doc.length > 1) {
+  //     for (let d = 0; d < doc.length; d++) {
+  //       console.log(json2, ...doc);
+  //       json2.push({ user: user, evento: doc[d].evento });
+  //     }
+  //   }
+  //   return;
+  // });
+  // console.log(json2);
+
+  let json = [];
   const eventos = allEvent.map((events) => {
-    const { _id, event, data, user } = events;
-    return {
-      id: _id,
-      title: `${event} - ${user}`,
-      start: moment(data).format('YYYY-MM-DD'),
-      end: moment(data).format('YYYY-MM-DD'),
-      backgroundColor: `${
-        user === 'Jessica'
-          ? 'purple'
-          : user === 'Vinicius'
-          ? 'darkblue'
-          : user === 'Felipe'
-          ? 'teal'
-          : user === 'Vitor'
-          ? 'OrangeRed'
-          : 'black'
-      }`,
-      borderColor: `${
-        user === 'Jessica'
-          ? 'purple'
-          : user === 'Vinicius'
-          ? 'darkblue'
-          : user === 'Felipe'
-          ? 'teal'
-          : user === 'Vitor'
-          ? 'OrangeRed'
-          : 'black'
-      }`,
-      display: 'block',
-    };
+    const { _id, user, turno, color, doc } = events;
+    if (doc.length > 1) {
+      for (let i = 0; i < doc.length; i++) {
+        json.push({
+          id: doc[i]._id,
+          iduser: _id,
+          user: user,
+          turno: turno,
+          title: doc[i].evento,
+          start: moment(doc[i].data).format('YYYY-MM-DD'),
+          end: moment(doc[i].data).format('YYYY-MM-DD'),
+          backgroundColor: color,
+          borderColor: color,
+          display: 'block',
+        });
+      }
+    }
+    return json;
   });
+
   const handleMouseOn = (event) => {
-    console.log(event);
     const currEvent = event.event._def;
-    const filter = allEvent.find((e) => {
-      return currEvent.publicId === e._id;
+    const filter = json.find((e) => {
+      return currEvent.publicId === e.id;
     });
+
     const curr = (
       <div className={`${css.tooltip} z-depth-2 scale-in`}>
         <div className={css.flex}>
@@ -81,11 +83,11 @@ export default function Calendar() {
             </div>
             <div>
               <span>Atividade: </span>
-              <span>{filter.event}</span>
+              <span>{filter.title}</span>
             </div>
             <div>
               <span>Turno: </span>
-              <span>{filter.tn}</span>
+              <span>{filter.turno}</span>
             </div>
           </div>
         </div>
@@ -100,34 +102,65 @@ export default function Calendar() {
     setActive(false);
   };
 
-  console.log(allEvent.length);
   return (
     <div>
-      {allEvent.length === 0 && <PreLoading />}
-      {allEvent.length > 0 && (
-        <FullCalendar
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin,
-            bootstrapPlugin,
-          ]}
-          locales={[allLocale]}
-          locale="pt-br"
-          initialView="dayGridMonth"
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
-          }}
-          height="auto"
-          selectable={true}
-          events={eventos}
-          themeSystem="bootstrap"
-          eventClick={handleMouseOn}
-        />
-      )}
-      {active === true ? tooltip : ''}
+      <div className={css.flex2}>
+        <div>
+          {allEvent.length === 0 && <PreLoading />}
+          {allEvent.length > 0 && (
+            <FullCalendar
+              plugins={[
+                dayGridPlugin,
+                timeGridPlugin,
+                interactionPlugin,
+                bootstrapPlugin,
+              ]}
+              locales={[allLocale]}
+              locale="pt-br"
+              initialView="dayGridMonth"
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay',
+              }}
+              height="auto"
+              selectable={true}
+              events={json}
+              themeSystem="bootstrap"
+              eventClick={handleMouseOn}
+            />
+          )}
+          {active === true ? tooltip : ''}
+        </div>
+        {/* {allEvent.length > 0 && (
+          <div className={css.mapa}>
+            <div>
+              {allEvent.map((u) => {
+                return (
+                  <div>
+                    <div style={{ marginBottom: '3px' }}>
+                      <span>{u.user}: </span>
+                      <span
+                        style={{
+                          border: `1px solid ${u.color}`,
+                          width: '3px',
+                          height: '1px',
+                          borderRadius: '8px',
+                          paddingLeft: '3px',
+                          paddingRight: '3px',
+                          paddingBottom: '1px',
+                          backgroundColor: `${u.color}`,
+                          marginLeft: '3px',
+                        }}
+                      ></span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )} */}
+      </div>
     </div>
   );
 }

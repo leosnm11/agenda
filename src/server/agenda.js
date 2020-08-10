@@ -1,4 +1,5 @@
 import ageModel from '../database/models/agenda.js';
+import eveModel from '../database/models/eventos.js';
 
 const allFind = async (req, res) => {
   const periodControl = req.query.period;
@@ -24,38 +25,90 @@ const allFind = async (req, res) => {
     console.log(`GET /v1/api/agenda - ${JSON.stringify(err)}`);
   }
 };
+const findDistinctUser = async (req, res) => {
+  const filter = req.query.distinct;
+  try {
+    const all = await ageModel.distinct(filter);
+    console.log(`GET /v1/api/agenda`);
+    await res.status(200).send(all);
+  } catch (err) {
+    await res
+      .status(500)
+      .json({ message: `${err.message} 'Erro ao listar documentos'` });
+    console.log(`GET /v1/api/agenda - ${JSON.stringify(err)}`);
+  }
+};
 
 const createEvent = async (req, res) => {
   const newEvent = req.body;
-  let separacao = newEvent.data.split('-');
-  let year = separacao[0];
-  let month = separacao[1];
-  let yearMonth = `${year}-${month}`;
-  let event = newEvent.event;
-  let data = newEvent.data;
+  let doc = [];
   let user = newEvent.user;
-  let tn = newEvent.tn;
+  let turno = newEvent.turno;
+  let color = newEvent.color;
   try {
-    const newDateEvent = await new ageModel({
-      event: event,
-      data: data,
-      mes: yearMonth,
-      ano: year,
-      user: user,
-      tn: tn,
+    let newDateEvent;
+    const findUser = await ageModel.find();
+
+    const exist = findUser.find((u) => {
+      return u.user === user;
     });
-    await newDateEvent.save();
-    await res
-      .status(201)
-      .send({ message: `Evento "${event}" cadastrado com sucesso!` });
-    console.log(
-      `POST /v1/api/agenda - Evento "${event}" cadastrado com sucesso!`
-    );
+
+    console.log(newEvent);
+    if (!exist) {
+      if (newEvent.doc.length > 1) {
+        for (let i = 0; i < newEvent.doc.length; i++) {
+          doc.push({ ...newEvent.doc[i] });
+        }
+      } else {
+        doc.push(newEvent.doc[0]);
+      }
+      newDateEvent = await new ageModel({
+        user: user,
+        turno: turno,
+        color: color,
+        doc: doc,
+      });
+      await newDateEvent.save();
+    } else {
+      if (exist.doc.length > 1) {
+        if (newEvent.doc.length > 1) {
+          for (let i = 0; i < newEvent.doc.length; i++) {
+            exist.doc.push({ ...newEvent.doc[i] });
+          }
+        } else {
+          doc.push(newEvent.doc[0]);
+        }
+        await ageModel.findOneAndUpdate(
+          { user: exist.user },
+          {
+            $set: exist,
+          },
+          { new: true }
+        );
+      } else {
+        if (newEvent.doc.length > 1) {
+          for (let i = 0; i < newEvent.doc.length; i++) {
+            exist.doc.push({ ...newEvent.doc[i] });
+          }
+        } else {
+          doc.push(newEvent.doc[0]);
+        }
+        await ageModel.findOneAndUpdate(
+          { user: exist.user },
+          {
+            $set: exist,
+          },
+          { new: true }
+        );
+      }
+    }
+    await res.status(201).send({ message: `Evento realizado com sucesso!` });
+    console.log(`POST /v1/api/agenda - Evento realizado com sucesso!`);
   } catch (err) {
     await res
       .status(500)
       .json({ message: `${err} 'Erro ao listar documentos'` });
-    console.log(`GET /v1/api/agenda - ${JSON.stringify(err)}`);
+    console.log(`POST /v1/api/agenda - ${err}`);
   }
 };
 
@@ -94,6 +147,18 @@ const updateOne = async (req, res) => {
   }
 };
 
+const findEventos = async (req, res) => {
+  try {
+    const allEvent = await eveModel.find({});
+    await res.status(200).send(allEvent);
+  } catch (err) {
+    await res
+      .status(500)
+      .json({ message: `${err} 'Erro ao listar documentos'` });
+    console.log(`POST /v1/api/agenda - ${err}`);
+  }
+};
+
 const deleteOne = async (req, res) => {
   const idEvent = req.params.id;
   try {
@@ -115,4 +180,11 @@ const deleteOne = async (req, res) => {
   }
 };
 
-export default { allFind, updateOne, createEvent, deleteOne };
+export default {
+  findEventos,
+  allFind,
+  updateOne,
+  createEvent,
+  deleteOne,
+  findDistinctUser,
+};

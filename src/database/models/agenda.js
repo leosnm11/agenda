@@ -2,19 +2,13 @@ import mongoose from 'mongoose';
 
 const ageSchema = mongoose.Schema(
   {
-    event: {
-      type: String,
-      required: true,
-    },
-    data: {
-      type: String,
-    },
-    mes: String,
     user: {
       type: String,
       required: true,
     },
-    tn: String,
+    turno: String,
+    color: String,
+    doc: [{ evento: String, data: String, mes: String, ano: String }],
   },
   {
     versionKey: false,
