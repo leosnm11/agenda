@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import * as api from '../api/apiService.js';
 import PreLoading from '../helpers/preLoading.js';
 import moment from 'moment';
+import css from '../helpers/style.module.css';
 
 export default function User() {
   const [allUser, SetAllUser] = useState([]);
+  const [currUser, setCurrUser] = useState([]);
+  const [currDate, setCurrDate] = useState('');
+  const [currName, setCurrName] = useState('');
 
   useEffect(() => {
     const Event = async () => {
@@ -36,12 +40,74 @@ export default function User() {
     }
     return json;
   });
+
+  const handleChangeDate = (event) => {
+    const data = event.target.value;
+    let filters = [];
+
+    if (!currDate) {
+      if (currUser.length > 0) {
+        filters = currUser.filter((u) => String(u.start).includes(data));
+      } else {
+        filters = json.filter((e) => String(e.start).includes(data));
+      }
+      setCurrDate(data);
+    } else {
+      if (currUser.length > 0) {
+        filters = json.filter((u) => String(u.user).includes(currName));
+        filters = filters.filter((u) => String(u.start).includes(data));
+      } else {
+        filters = json.filter((e) => String(e.start).includes(data));
+      }
+      setCurrDate(data);
+    }
+    setCurrUser(filters);
+  };
+  const handleChangeName = (event) => {
+    const name = event.target.value;
+    let filters = [];
+    if (currUser.length > 0) {
+      filters = currUser.filter((u) => String(u.user).includes(name));
+    } else {
+      filters = json.filter((e) => String(e.user).includes(name));
+    }
+
+    if (!name) {
+      if (currDate) {
+        filters = json.filter((u) => String(u.start).includes(currDate));
+        setCurrUser(filters);
+      } else {
+        setCurrUser([]);
+      }
+    } else {
+      setCurrUser(filters);
+    }
+    setCurrName(name);
+  };
+
   return (
     <div className="highlight">
       {allUser.length === 0 && <PreLoading />}
       {allUser.length > 0 && (
         <div>
-          <table>
+          <div className={`${css.filter} row`}>
+            <div className={`col s2 ${css.filterInput}`}>
+              <input
+                type="date"
+                className="datepicker"
+                format="YYYY-MM-DD"
+                onChange={handleChangeDate}
+              />
+            </div>
+            <div className={`col s12 ${css.filterInput}`}>
+              <input
+                type="text"
+                className="validate"
+                onChange={handleChangeName}
+              />
+            </div>
+          </div>
+          <table className="highlight">
             <thead>
               <tr>
                 <th>Usuário</th>
@@ -51,25 +117,28 @@ export default function User() {
                 <th></th>
               </tr>
             </thead>
-            {json.map((u) => {
-              const { id, title, user, turno, start } = u;
-              return (
-                <tbody key={id}>
-                  <td>{user}</td>
-                  <td>{turno}</td>
-                  <td>{title}</td>
-                  <td>{moment(start).format('YYYY-MM-DD')}</td>
-                  <td>
-                    <button
-                      className="waves-effect waves-light btn-small"
-                      id={id}
-                    >
-                      Edit ainda não está funcionando
-                    </button>
-                  </td>
-                </tbody>
-              );
-            })}
+            {currUser.length > 0 &&
+              currUser.map((u) => {
+                const { id, title, user, turno, start } = u;
+                return (
+                  <tbody key={id}>
+                    <tr>
+                      <td>{user}</td>
+                      <td>{turno}</td>
+                      <td>{title}</td>
+                      <td>{moment(start).format('YYYY-MM-DD')}</td>
+                      <td>
+                        <button
+                          className="waves-effect waves-light btn-small"
+                          id={id}
+                        >
+                          Edit ainda não está funcionando
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                );
+              })}
           </table>
         </div>
       )}

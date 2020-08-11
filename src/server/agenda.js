@@ -5,7 +5,7 @@ const allFind = async (req, res) => {
   const periodControl = req.query.period;
   let condition = periodControl
     ? {
-        mes: periodControl,
+        doc: { data: periodControl },
       }
     : {};
   try {

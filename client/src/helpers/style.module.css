@@ -2,6 +2,10 @@
   width: 85%;
   margin: 0 auto;
 }
+
+.bodyColor {
+  background-color: white;
+}
 .tooltip {
   position: absolute;
   bottom: 600px;
@@ -65,4 +69,38 @@
 .select {
   display: block;
   width: 300px;
+}
+
+.divNav {
+  border-top: 1px solid yellow;
+}
+
+.admContainer {
+  padding: 5px;
+  width: 1100px;
+}
+.admin {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  justify-content: center;
+  background-color: black;
+}
+.buttonAdm {
+  margin-left: 5px;
+}
+
+.divAdm {
+  font-size: 1.2rem;
+  color: rgb(255, 255, 132);
+  margin: 1%;
+}
+
+.filter {
+  display: flex;
+  flex-direction: row;
+}
+
+.filterInput {
+  margin: 5px;
 }

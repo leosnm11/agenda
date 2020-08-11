@@ -3,12 +3,13 @@ import css from './helpers/style.module.css';
 import userPath from './component/user';
 import eventPath from './component/event';
 import calendarEvent from './component/calendar';
+import adminPath from './component/Administracao';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
-      <div className={css.body}>
+      <div className={`${css.body} `}>
         <nav>
           <div className="nav-wrapper black">
             <img
@@ -29,10 +30,13 @@ function App() {
                 <Link to={'/'}>Atividades</Link>
               </li>
               <li>
-                <Link to={'/users'}>Listar todas atividades</Link>
+                <Link to={'/users'}>Localizar atividades</Link>
               </li>
               <li>
                 <Link to={'/atividades'}>Add Atividades</Link>
+              </li>
+              <li>
+                <Link to={'/administracao'}>Administração</Link>
               </li>
             </ul>
           </div>
@@ -42,6 +46,7 @@ function App() {
             <Route exact path="/" component={calendarEvent} />
             <Route exact path="/users" component={userPath} />
             <Route path="/atividades" component={eventPath} />
+            <Route path="/administracao" component={adminPath} />
           </Switch>
         </div>
       </div>
