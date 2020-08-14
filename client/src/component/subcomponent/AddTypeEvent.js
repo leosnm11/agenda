@@ -100,8 +100,8 @@ export default function AddTypeEvent() {
             <form>
               <div className={css.addTypeEvent}>
                 <div className={css.divTypeEvent}>
-                  <div>
-                    <label htmlFor="eventos" className="validate">
+                  <div className="input-field">
+                    <label htmlFor="eventos">
                       Nova atividade
                       <input
                         type="text"
@@ -109,7 +109,7 @@ export default function AddTypeEvent() {
                         onChange={handleChangeEventos}
                         name="eventos"
                         value={newValue}
-                        className={css.inputTypeEvent}
+                        className={`validate ${css.inputTypeEvent}`}
                       />
                     </label>
                   </div>
