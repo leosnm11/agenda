@@ -115,6 +115,7 @@
   width: 500px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 130px;
 }
 .inputTypeEvent {
   width: 350px;
