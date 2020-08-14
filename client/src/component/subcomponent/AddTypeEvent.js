@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as api from '../../api/apiService.js';
 import PreLoading from '../../helpers/preLoading.js';
+import css from '../../helpers/style.module.css';
 
 export default function AddTypeEvent() {
   const [newEvent, setNewEvent] = useState([]);
@@ -97,19 +98,22 @@ export default function AddTypeEvent() {
         <div>
           <div>
             <form>
-              <div>
-                <div>
-                  <label htmlFor="eventos" className="validate">
-                    Nova atividade
-                    <input
-                      type="text"
-                      id="eventos"
-                      onChange={handleChangeEventos}
-                      name="eventos"
-                      value={newValue}
-                    />
-                  </label>
-                  {men}
+              <div className={css.addTypeEvent}>
+                <div className={css.divTypeEvent}>
+                  <div>
+                    <label htmlFor="eventos" className="validate">
+                      Nova atividade
+                      <input
+                        type="text"
+                        id="eventos"
+                        onChange={handleChangeEventos}
+                        name="eventos"
+                        value={newValue}
+                        className={css.inputTypeEvent}
+                      />
+                    </label>
+                  </div>
+                  <div className={`${css.erroMess}`}>{men}</div>
                 </div>
                 <div>
                   <button
@@ -133,7 +137,7 @@ export default function AddTypeEvent() {
             <table className="highlight">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Atividade</th>
                   <th>Ação</th>
                 </tr>
               </thead>

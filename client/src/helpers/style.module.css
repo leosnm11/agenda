@@ -104,3 +104,22 @@
 .filterInput {
   margin: 5px;
 }
+
+.addTypeEvent {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.divTypeEvent {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+.inputTypeEvent {
+  width: 350px;
+}
+.erroMess {
+  color: red;
+  font-weight: bold;
+}
