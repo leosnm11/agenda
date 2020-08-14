@@ -48,6 +48,13 @@ async function createEvent(data) {
   const res = await http.post('/v1/api/agenda/', data);
   return res;
 }
+async function createTypeEvent(data) {
+  const res = await http.post('/v1/api/agenda/eventos', data);
+  return res;
+}
+async function deleteOneEvent(id) {
+  return await http.delete(`/v1/api/agenda/eventos/${id}`);
+}
 
 export {
   getListEvent,
@@ -56,5 +63,7 @@ export {
   deleteOne,
   updateEvent,
   createEvent,
+  createTypeEvent,
   getUser,
+  deleteOneEvent,
 };

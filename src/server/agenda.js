@@ -159,6 +159,25 @@ const findEventos = async (req, res) => {
   }
 };
 
+const createTypeEvent = async (req, res) => {
+  let evento = req.body;
+  try {
+    const findAtividades = await eveModel.find(evento);
+    if (findAtividades.length === 0) {
+      const newEvent = new eveModel(evento);
+      await newEvent.save();
+      await res.status(201).send({ message: `Evento realizado com sucesso!` });
+    } else {
+      await res.status(201).send({ message: `Atividade já existe!` });
+    }
+  } catch (err) {
+    await res
+      .status(500)
+      .json({ message: `${err} 'Erro ao listar documentos'` });
+    console.log(`POST /v1/api/agenda - ${err}`);
+  }
+};
+
 const deleteOne = async (req, res) => {
   const idEvent = req.params.id;
   try {
@@ -179,12 +198,34 @@ const deleteOne = async (req, res) => {
     console.log(`DELETE /v1/api/agenda - ${JSON.stringify(err)}`);
   }
 };
+const deleteOneEvent = async (req, res) => {
+  const idEvent = req.params.id;
+  try {
+    const isDelete = await eveModel.findOneAndDelete({ _id: idEvent });
+    if (!isDelete) {
+      res
+        .status(400)
+        .send(
+          `Documento não encontrado na coleção id informado: ${req.params.id}`
+        );
+    } else {
+      await res.status(200).send({ message: `Evento excluído com sucesso!` });
+    }
+  } catch (error) {
+    await res
+      .status(500)
+      .json({ message: `${err} 'Erro ao excluir documentos'` });
+    console.log(`DELETE /v1/api/agenda - ${JSON.stringify(err)}`);
+  }
+};
 
 export default {
   findEventos,
+  createTypeEvent,
   allFind,
   updateOne,
   createEvent,
   deleteOne,
   findDistinctUser,
+  deleteOneEvent,
 };

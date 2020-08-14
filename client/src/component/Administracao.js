@@ -16,8 +16,8 @@ export default function Administracao() {
               <label className={css.divAdm}>
                 Novo responsável:
                 <button className={`btn-small ${css.buttonAdm}`}>
-                  <i class="material-icons">add</i>
-                  <i class="material-icons Medium">person</i>
+                  <i className="material-icons">add</i>
+                  <i className="material-icons Medium">person</i>
                 </button>
               </label>
             </Link>
